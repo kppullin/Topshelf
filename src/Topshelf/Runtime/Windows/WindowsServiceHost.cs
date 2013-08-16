@@ -223,24 +223,26 @@ namespace Topshelf.Runtime.Windows
         {
             _log.Error("The service threw an unhandled exception", (Exception)e.ExceptionObject);
 
-            ExitCode = (int)TopshelfExitCode.UnhandledServiceException;
+            return;
 
-            Stop();
+//            ExitCode = (int)TopshelfExitCode.UnhandledServiceException;
+
+//            Stop();
 
 
-#if !NET35
-            // it isn't likely that a TPL thread should land here, but if it does let's no block it
-            if (Task.CurrentId.HasValue)
-            {
-                return;
-            }
-#endif
+//#if !NET35
+//            // it isn't likely that a TPL thread should land here, but if it does let's no block it
+//            if (Task.CurrentId.HasValue)
+//            {
+//                return;
+//            }
+//#endif
 
-            int deadThreadId = Interlocked.Increment(ref _deadThread);
-            Thread.CurrentThread.IsBackground = true;
-            Thread.CurrentThread.Name = "Unhandled Exception " + deadThreadId.ToString();
-            while (true)
-                Thread.Sleep(TimeSpan.FromHours(1));
+//            int deadThreadId = Interlocked.Increment(ref _deadThread);
+//            Thread.CurrentThread.IsBackground = true;
+//            Thread.CurrentThread.Name = "Unhandled Exception " + deadThreadId.ToString();
+//            while (true)
+//                Thread.Sleep(TimeSpan.FromHours(1));
         }
     }
 }
